@@ -49,19 +49,15 @@ void dfs(int x, int p, int d)
 
 void hld(int x, int p)
 {
-	//cout << "x = " << x << " p = " << p << endl;
 	pos[x] = ++next_free;
 	arr[pos[x]] = cost[x];
 
 	if (main_child[x]) chain_head[main_child[x]] = chain_head[x];
-
-	//cout << "x= " << x << " pos= " << pos[x] << " ch= " << chain_head[x] << endl;
 	if (main_child[x]) hld(main_child[x], x);
 
 	int y;
 	for (int i = 0; i < v[x].size(); ++i) {
 		y = v[x][i].fi;
-		//cout << "x = " << x << " y = " << y << endl;
 		if (y == p || y == main_child[x]) continue;
 		chain_head[y] = y;
 		hld(y, x);
@@ -99,17 +95,14 @@ int query(int n, int start, int end, int l, int r)
 	if (start >= l && end <= r) return tree[n];
 	int mid = (start + end) >> 1;
 	return max(query(n<<1, start, mid, l, r), query(n<<1|1, mid+1, end, l, r));
-	//cout << "start = " << start << " end = " << end << " val = " << val << endl;
 }
 
 int hld_query(int x, int y)
 {
 	int ret = -MOD;
-
 	int a = chain_head[x];
 	int b = chain_head[y];
 	while (a != b) {
-		//cout << "x = " << x << " " << " y = " << y << " a = " << a << " b = " << b << " ret = " << ret << endl; 
 		if (depth[a] >= depth[b]) {
 			ret = max(ret, query(1, 1, N, pos[a], pos[x]));
 			x = par[a];
@@ -124,7 +117,6 @@ int hld_query(int x, int y)
 	a = min(pos[x], pos[y]) + 1;
 	b = max(pos[x], pos[y]);
 
-	//cout << "a = " << a << " b = " << b << " qry = " << query(1, 1, N, a, b) << endl;
 	if (a > b) return ret;
 	return max(ret, query(1, 1, N, a, b));
 }
